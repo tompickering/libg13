@@ -4,6 +4,3 @@ all: src/*.c
 install:
 	cp libg13.so /usr/lib/
 	cp src/libg13.h /usr/include/
-
-test test.c:
-	$(CC) -o test -L/home/tom/projects/drivers/g13_lib -lg13 test.c
