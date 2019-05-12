@@ -1,3 +1,3 @@
 This directory contains a few short example programs which make use of libgl13. Run 'make' to build each of them.
-Root privilege is required to interface with the G13 device.
+Root privilege is required to interface with the G13 device, unless udev has been configured otherwise (see the top-level README for advice on how to do this)
 When running the 'image' example, 'cd' to the 'image' directory first.

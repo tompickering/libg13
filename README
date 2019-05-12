@@ -5,4 +5,10 @@ Utility library for interfacing with Logitech G13 devices
 Requirements:
 * libusb: https://libusb.info/
 
+To allow interfacing with the G13 device without root privilege, create the file /etc/udev/rules.d/50-g13.rules and add the following line:
+
+SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c21c", TAG+="uaccess"
+
+Note that after saving this file, the device needs to be unplugged and plugged back in before the changes will take effect.
+
 Due credit goes to ecraven for the g13 driver available at https://github.com/ecraven/g13, which was an invaluable reference in establishing the core functionality.
