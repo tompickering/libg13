@@ -1,0 +1,3 @@
+This directory contains a few short example programs which make use of libgl13. Run 'make' to build each of them.
+Root privilege is required to interface with the G13 device.
+When running the 'image' example, 'cd' to the 'image' directory first.

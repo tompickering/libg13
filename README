@@ -1,0 +1,8 @@
+libg13
+
+Utility library for interfacing with Logitech G13 devices
+
+Requirements:
+* libusb: https://libusb.info/
+
+Due credit goes to ecraven for the g13 driver available at https://github.com/ecraven/g13, which was an invaluable reference in establishing the core functionality.
