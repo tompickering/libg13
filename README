@@ -3,7 +3,7 @@ libg13
 Utility library for interfacing with Logitech G13 devices
 
 Requirements:
-* libusb: https://libusb.info/
+* libusb: https://libusb.info/ (on Debian-based distros: sudo apt-get install libusb-1.0-0-dev)
 
 To allow interfacing with the G13 device without root privilege, create the file /etc/udev/rules.d/50-g13.rules and add the following line:
 
