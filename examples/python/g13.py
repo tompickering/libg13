@@ -39,4 +39,4 @@ libg13.g13_bind_stick(StickCallbackType(stick_bind))
 
 while True:
     time.sleep(2)
-    libg13.g13_set_colour(random.getrandbits(8), random.getrandbits(8), random.getrandbits(8))
+    libg13.g13_set_color(random.getrandbits(8), random.getrandbits(8), random.getrandbits(8))

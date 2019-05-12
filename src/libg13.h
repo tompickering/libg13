@@ -30,7 +30,7 @@ enum G13Keys {
 int g13_init(void);
 void g13_set_img(char*);
 void g13_clear_lcd();
-void g13_set_colour(int, int, int);
+void g13_set_color(int, int, int);
 void g13_render(void);
 void g13_bind_key(int, func_ptr_t);
 void g13_bind_stick(func_stick_ptr_t);

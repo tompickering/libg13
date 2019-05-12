@@ -124,7 +124,7 @@ void send_event(int infile, int type, int code, int val) {
     write(infile, &_event, sizeof(_event));
 }
 
-void g13_set_colour(int red, int green, int blue) {
+void g13_set_color(int red, int green, int blue) {
     int error;
     unsigned char usb_data[] = { 5, 0, 0, 0, 0 };
     usb_data[1] = red;

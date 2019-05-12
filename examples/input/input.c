@@ -6,15 +6,15 @@
 unsigned char x, y;
 
 void red() {
-    g13_set_colour(255, 0, 0);
+    g13_set_color(255, 0, 0);
 }
 
 void green() {
-    g13_set_colour(0, 255, 0);
+    g13_set_color(0, 255, 0);
 }
 
 void blue() {
-    g13_set_colour(0, 0, 255);
+    g13_set_color(0, 0, 255);
 }
 
 void stick(unsigned char new_x, unsigned char new_y) {
@@ -23,7 +23,7 @@ void stick(unsigned char new_x, unsigned char new_y) {
     if (new_x != x || new_y != y) {
         x = new_x;
         y = new_y;
-        g13_set_colour(x, 255, 255 - x);
+        g13_set_color(x, 255, 255 - x);
         g13_clear_lcd();
         g13_draw_circle(2 + (int)(155.f * (float)x / 255.f),
                     2 + (int)(36.f * (float)y / 255.f), 2.);
