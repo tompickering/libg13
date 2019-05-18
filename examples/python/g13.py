@@ -37,6 +37,10 @@ libg13.g13_init()
 libg13.g13_bind_key(G1, ButtonCallbackType(g1_bind))
 libg13.g13_bind_stick(StickCallbackType(stick_bind))
 
+print('LCD screen dimensions: {}x{}'.format(
+    *(ctypes.c_ubyte.in_dll(libg13, 'G13_LCD_PX_{}'.format(dim)).value
+      for dim in 'XY')))
+
 while True:
     time.sleep(2)
     libg13.g13_set_color(random.getrandbits(8), random.getrandbits(8), random.getrandbits(8))
