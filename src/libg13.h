@@ -1,15 +1,6 @@
 #ifndef GUARD_LIBG13_H
 #define GUARD_LIBG13_H
 
-#define G13LCD_SZ_BYTE 960
-#define G13LCD_W_PX 160
-#define G13LCD_H_PX  43
-
-
-// Input callback function types
-typedef void(*func_ptr_t)(void);
-typedef void(*func_stick_ptr_t)(unsigned char, unsigned char);
-
 
 // Keys
 enum G13Keys {
@@ -23,6 +14,9 @@ enum G13Keys {
     N_KEYS /* Equal to number of elements */
 };
 
+// Input callback function types
+typedef void(*g13_func_ptr_btn_t)(void);
+typedef void(*g13_func_ptr_stk_t)(unsigned char, unsigned char);
 
 
 /*** g13.c ***/
@@ -32,42 +26,11 @@ void g13_set_img(char*);
 void g13_clear_lcd();
 void g13_set_color(int, int, int);
 void g13_render(void);
-void g13_bind_key(int, func_ptr_t);
-void g13_bind_stick(func_stick_ptr_t);
-
+void g13_bind_key(int, g13_func_ptr_btn_t);
+void g13_bind_stick(g13_func_ptr_stk_t);
 
 
 /*** draw.c ***/
-
-typedef struct G13LCD G13LCD;
-typedef struct Elem Elem;
-typedef struct Point Point;
-
-struct G13LCD {
-    unsigned char img[G13LCD_SZ_BYTE];
-};
-
-struct Elem {
-    Point* p;
-    unsigned int count;
-    Elem* next;
-    char is_grapheme;
-    unsigned int x_off;
-    unsigned int y_off;
-};
-
-struct Point {
-    unsigned char x;
-    unsigned char y;
-};
-
-Elem** ascii;
-
-Elem* get_ascii(char);
-void _add_point(Elem*, Point);
-void render(G13LCD*);
-void clear_elems();
-G13LCD *new_lcd(void);
 
 void g13_draw_char(unsigned int, unsigned int, char);
 void g13_draw_sentence(unsigned int, unsigned int, char*);
@@ -75,10 +38,5 @@ void g13_draw_circle(unsigned int, unsigned int, float);
 void g13_draw_line(int, int, int, int);
 void g13_draw_triangle(int, int, int, int, int, int);
 
-
-
-/*** ascii.c ***/
-
-void _init_ascii(void);
 
 #endif

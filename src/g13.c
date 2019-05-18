@@ -1,4 +1,5 @@
 #include "libg13.h"
+#include "libg13_private.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,8 +20,8 @@ G13LCD* lcd;
 
 libusb_device_handle *handle;
 
-func_ptr_t *bound_keys;
-func_stick_ptr_t *_stick;
+g13_func_ptr_btn_t *bound_keys;
+g13_func_ptr_stk_t *_stick;
 
 void _init_lcd() {
     lcd = new_lcd();
@@ -140,11 +141,11 @@ void g13_set_color(int red, int green, int blue) {
     }
 }
 
-void g13_bind_key(int k, func_ptr_t f) {
+void g13_bind_key(int k, g13_func_ptr_btn_t f) {
     bound_keys[k] = f;
 }
 
-void g13_bind_stick(func_stick_ptr_t f) {
+void g13_bind_stick(g13_func_ptr_stk_t f) {
     *_stick = f;
 }
 
@@ -231,8 +232,8 @@ int g13_init(void) {
         exit(1);
     }
 
-    bound_keys = calloc(N_KEYS, sizeof(func_ptr_t));
-    _stick = calloc(1, sizeof(func_stick_ptr_t));
+    bound_keys = calloc(N_KEYS, sizeof(g13_func_ptr_btn_t));
+    _stick = calloc(1, sizeof(g13_func_ptr_stk_t));
 
     create_uinput();
 

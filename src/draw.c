@@ -1,4 +1,5 @@
 #include "libg13.h"
+#include "libg13_private.h"
 
 #include <stdio.h>
 #include <stdlib.h>
