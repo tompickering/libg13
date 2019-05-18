@@ -13,6 +13,10 @@
 #include <string.h>
 #include "libusb-1.0/libusb.h"
 
+
+const unsigned char G13_LCD_PX_X = 160;
+const unsigned char G13_LCD_PX_Y = 43;
+
 libusb_device **devs;
 struct input_event _event;
 

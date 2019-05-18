@@ -2,8 +2,6 @@
 #define GUARD_LIBG13_PRIVATE_H
 
 #define G13LCD_SZ_BYTE 960
-#define G13LCD_W_PX 160
-#define G13LCD_H_PX  43
 
 
 /*** g13.c ***/

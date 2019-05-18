@@ -108,7 +108,7 @@ void render(G13LCD* lcd) {
     while (e) {
         p = e->p;
         while (p < e->p + e->count) {
-            (lcd->img)[e->x_off + p->x + G13LCD_W_PX*((e->y_off + p->y) / 8)] |= 1<<((e->y_off + p->y)%8);
+            (lcd->img)[e->x_off + p->x + G13_LCD_PX_X*((e->y_off + p->y) / 8)] |= 1<<((e->y_off + p->y)%8);
             ++p;
         }
         e = e->next;

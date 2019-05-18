@@ -2,6 +2,10 @@
 #define GUARD_LIBG13_H
 
 
+// LCD dimensions
+extern const unsigned char G13_LCD_PX_X;
+extern const unsigned char G13_LCD_PX_Y;
+
 // Keys
 enum G13Keys {
     G1, G2, G3, G4, G5, G6, G7, G8, G9, G10,
