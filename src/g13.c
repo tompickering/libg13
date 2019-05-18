@@ -29,6 +29,8 @@ g13_func_ptr_stk_t *_stick;
 
 void _init_lcd() {
     lcd = new_lcd();
+    g13_clear_lcd();
+    g13_render();
 }
 
 void set_lcd_img(libusb_device_handle *handle, char mask, char *file) {
