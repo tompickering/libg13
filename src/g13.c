@@ -155,6 +155,14 @@ void g13_bind_stick(g13_func_ptr_stk_t f) {
     *_stick = f;
 }
 
+void g13_unbind_key(int k) {
+    bound_keys[k] = NULL;
+}
+
+void g13_unbind_stick() {
+    *_stick = NULL;
+}
+
 int read_keys(libusb_device_handle *handle) {
     unsigned char buffer[8];
     int size;

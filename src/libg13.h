@@ -32,6 +32,8 @@ void g13_set_color(int, int, int);
 void g13_render(void);
 void g13_bind_key(int, g13_func_ptr_btn_t);
 void g13_bind_stick(g13_func_ptr_stk_t);
+void g13_unbind_key(int);
+void g13_unbind_stick();
 
 
 /*** draw.c ***/
