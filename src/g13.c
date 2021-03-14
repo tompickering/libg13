@@ -32,7 +32,8 @@ static char stick_y;
 
 Elem** ascii;
 
-static char key_state[3];
+/* key_state[0] - key_state[4] corresponds with buffer[3] - buffer[7] */
+static char key_state[5];
 
 void _init_lcd() {
     lcd = new_lcd();
@@ -170,6 +171,14 @@ void g13_unbind_stick() {
     *_stick = NULL;
 }
 
+#define UPDATE_KEY(key, bufidx, mask) \
+    if ((buffer[(bufidx)] & (mask)) != (key_state[((bufidx) - 3)] & (mask))) { \
+        key_state[((bufidx) - 3)] ^= (mask); \
+        if (bound_keys[(key)]) { \
+            bound_keys[(key)]((buffer[(bufidx)] & (mask))); \
+        } \
+    }
+
 int read_keys(libusb_device_handle *handle) {
     unsigned char buffer[8];
     int size;
@@ -208,6 +217,8 @@ int read_keys(libusb_device_handle *handle) {
     }
     */
 
+    char is_pressed;
+
     /* G keys */
     /* Iterate over the buffers... */
     for (j = 0; j < 3; ++j) {
@@ -220,7 +231,7 @@ int read_keys(libusb_device_handle *handle) {
                  */
                 continue;
             }
-            char is_pressed = buffer[j + 3] & (1 << i);
+            is_pressed = buffer[j + 3] & (1 << i);
             if (is_pressed != (key_state[j] & (1 << i))) {
                 printf("%d %d\n", is_pressed, key_state[j]);
                 key_state[j] ^= (1 << i);
@@ -231,30 +242,39 @@ int read_keys(libusb_device_handle *handle) {
         }
     }
 
+    /*
+     * UPDATE_KEY, e.g:
+     *
+     *  is_pressed = buffer[6] & 0x20;
+     *  if (is_pressed != key_state[3] & 0x20) {
+     *      key_state[3] ^= 0x20;
+     *      if (bound_keys[M1]) {
+     *          bound_keys[M1](is_pressed);
+     *      }
+     *  }
+     */
+
     /* M keys */
-    if (buffer[6] & 0x20 && bound_keys[M1]) bound_keys[M1](true);
-    if (buffer[6] & 0x40 && bound_keys[M2]) bound_keys[M2](true);
-    if (buffer[6] & 0x80 && bound_keys[M3]) bound_keys[M3](true);
-    if (buffer[7] & 0x01 && bound_keys[MR]) bound_keys[MR](true);
+    UPDATE_KEY(M1, 6, 0x20);
+    UPDATE_KEY(M2, 6, 0x40);
+    UPDATE_KEY(M3, 6, 0x80);
+    UPDATE_KEY(MR, 7, 0x01);
 
     /* Round button */
-    if (buffer[6] & 0x01 && bound_keys[ROUND]) bound_keys[ROUND](true);
+    UPDATE_KEY(ROUND, 6, 0x01);
 
     /* Top buttons */
-    if (buffer[6] & 0x02 && bound_keys[T1]) bound_keys[T1](true);
-    if (buffer[6] & 0x04 && bound_keys[T2]) bound_keys[T2](true);
-    if (buffer[6] & 0x08 && bound_keys[T3]) bound_keys[T3](true);
-    if (buffer[6] & 0x10 && bound_keys[T4]) bound_keys[T4](true);
+    UPDATE_KEY(T1, 6, 0x02);
+    UPDATE_KEY(T2, 6, 0x04);
+    UPDATE_KEY(T3, 6, 0x08);
+    UPDATE_KEY(T4, 6, 0x10);
 
     /* Brightness */
-    if (buffer[7] & (0x20 | 0x40) && bound_keys[BRIGHT])
-        bound_keys[BRIGHT](true);
+    UPDATE_KEY(BRIGHT, 7, 0x20 | 0x40);
 
     /* Mouse buttons */
-    if (buffer[7] & 0x02 && bound_keys[CLICK1])
-        bound_keys[CLICK1](true);
-    if (buffer[7] & 0x04 && bound_keys[CLICK2])
-        bound_keys[CLICK2](true);
+    UPDATE_KEY(CLICK1, 7, 0x02);
+    UPDATE_KEY(CLICK2, 7, 0x04);
 
     /* Bytes 1 and 2 are X and Y resp */
     if ((buffer[1] || buffer[2]) && *_stick && (buffer[1] != stick_x || buffer[2] != stick_y)) {
