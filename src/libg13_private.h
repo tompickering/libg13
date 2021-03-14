@@ -31,7 +31,7 @@ struct Point {
     unsigned char y;
 };
 
-Elem** ascii;
+extern Elem** ascii;
 
 Elem* get_ascii(char);
 void _add_point(Elem*, Point);

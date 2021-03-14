@@ -27,6 +27,8 @@ libusb_device_handle *handle;
 g13_func_ptr_btn_t *bound_keys;
 g13_func_ptr_stk_t *_stick;
 
+Elem** ascii;
+
 void _init_lcd() {
     lcd = new_lcd();
     g13_clear_lcd();
