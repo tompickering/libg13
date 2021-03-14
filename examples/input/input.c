@@ -5,16 +5,28 @@
 
 unsigned char x, y;
 
-void red() {
-    g13_set_color(255, 0, 0);
+void red(bool pressed) {
+    if (pressed) {
+        g13_set_color(255, 0, 0);
+    } else {
+        g13_set_color(255, 255, 255);
+    }
 }
 
-void green() {
-    g13_set_color(0, 255, 0);
+void green(bool pressed) {
+    if (pressed) {
+        g13_set_color(0, 255, 0);
+    } else {
+        g13_set_color(255, 255, 255);
+    }
 }
 
-void blue() {
-    g13_set_color(0, 0, 255);
+void blue(bool pressed) {
+    if (pressed) {
+        g13_set_color(0, 0, 255);
+    } else {
+        g13_set_color(255, 255, 255);
+    }
 }
 
 void stick(unsigned char new_x, unsigned char new_y) {
@@ -38,6 +50,7 @@ void clear() {
 
 int main(int argc, char** argv) {
     g13_init();
+    g13_set_color(255, 255, 255);
     g13_bind_key(G1, red);
     g13_bind_key(G2, green);
     g13_bind_key(G3, blue);
