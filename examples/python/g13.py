@@ -18,15 +18,18 @@ import ctypes
 ) = map(ctypes.c_int, range(35))
 
 # Callback types
-ButtonCallbackType = ctypes.CFUNCTYPE(None)
+ButtonCallbackType = ctypes.CFUNCTYPE(None, ctypes.c_bool)
 StickCallbackType = ctypes.CFUNCTYPE(None, ctypes.c_uint8, ctypes.c_uint8)
 
 # Load the library
 libg13 = ctypes.cdll.LoadLibrary('/usr/lib/libg13.so')
 
 
-def g1_bind():
-    print('G1 pressed')
+def g1_bind(pressed):
+    if pressed:
+        print('G1 pressed')
+    else:
+        print('G1 released')
 
 def stick_bind(x, y):
     print('Stick at {},{}'.format(x, y))
