@@ -1,6 +1,8 @@
 #ifndef GUARD_LIBG13_H
 #define GUARD_LIBG13_H
 
+#include <stdbool.h>
+
 
 // LCD dimensions
 extern const unsigned char G13_LCD_PX_X;
@@ -19,7 +21,7 @@ enum G13Keys {
 };
 
 // Input callback function types
-typedef void(*g13_func_ptr_btn_t)(void);
+typedef void(*g13_func_ptr_btn_t)(bool);
 typedef void(*g13_func_ptr_stk_t)(unsigned char, unsigned char);
 
 

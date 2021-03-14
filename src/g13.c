@@ -27,7 +27,12 @@ libusb_device_handle *handle;
 g13_func_ptr_btn_t *bound_keys;
 g13_func_ptr_stk_t *_stick;
 
+static char stick_x;
+static char stick_y;
+
 Elem** ascii;
+
+static char key_state[3];
 
 void _init_lcd() {
     lcd = new_lcd();
@@ -177,7 +182,9 @@ int read_keys(libusb_device_handle *handle) {
             LIBUSB_ENDPOINT_IN | 1, buffer, 8,
             &size, 100);
 
-    if (error && error != LIBUSB_ERROR_TIMEOUT) {
+    if (error == LIBUSB_ERROR_TIMEOUT) {
+        return 0;
+    } else if (error) {
         exit(1);
     }
 
@@ -186,45 +193,75 @@ int read_keys(libusb_device_handle *handle) {
     // G17..G22 in byte 5, G17 = least sig bit
     // two most sig bits of B5: less sig not used? most = any input.
 
+    /*
+    printf("\e[H\e[J");
+    for (int k = 0; k < 8; ++k) {
+        printf("%d: ", k);
+        for (i = 0; i < 8; ++i) {
+            if ((buffer[k] >> i) & 0x1) {
+                printf("1");
+            } else {
+                printf("0");
+            }
+        }
+        printf("\n");
+    }
+    */
+
     /* G keys */
     /* Iterate over the buffers... */
     for (j = 0; j < 3; ++j) {
         /* Iterate over the bits... */
         for (i = 0; i < 8; ++i) {
-            if ((buffer[j + 3] >> i) & 0x1)
-                if (bound_keys[G1 + j*8 + i])
-                    bound_keys[G1 + j*8 + i]();
+            if (j == 2 && i == 7) {
+                /*
+                 * The most significant bit in buffer[5] does not
+                 * map to a key, and is set on any input change.
+                 */
+                continue;
+            }
+            char is_pressed = buffer[j + 3] & (1 << i);
+            if (is_pressed != (key_state[j] & (1 << i))) {
+                printf("%d %d\n", is_pressed, key_state[j]);
+                key_state[j] ^= (1 << i);
+                if (bound_keys[G1 + j*8 + i]) {
+                    bound_keys[G1 + j*8 + i](is_pressed);
+                }
+            }
         }
     }
 
     /* M keys */
-    if (buffer[6] & 0x20 && bound_keys[M1]) bound_keys[M1]();
-    if (buffer[6] & 0x40 && bound_keys[M2]) bound_keys[M2]();
-    if (buffer[6] & 0x80 && bound_keys[M3]) bound_keys[M3]();
-    if (buffer[7] & 0x01 && bound_keys[MR]) bound_keys[MR]();
+    if (buffer[6] & 0x20 && bound_keys[M1]) bound_keys[M1](true);
+    if (buffer[6] & 0x40 && bound_keys[M2]) bound_keys[M2](true);
+    if (buffer[6] & 0x80 && bound_keys[M3]) bound_keys[M3](true);
+    if (buffer[7] & 0x01 && bound_keys[MR]) bound_keys[MR](true);
 
     /* Round button */
-    if (buffer[6] & 0x01 && bound_keys[ROUND]) bound_keys[ROUND]();
+    if (buffer[6] & 0x01 && bound_keys[ROUND]) bound_keys[ROUND](true);
 
     /* Top buttons */
-    if (buffer[6] & 0x02 && bound_keys[T1]) bound_keys[T1]();
-    if (buffer[6] & 0x04 && bound_keys[T2]) bound_keys[T2]();
-    if (buffer[6] & 0x08 && bound_keys[T3]) bound_keys[T3]();
-    if (buffer[6] & 0x10 && bound_keys[T4]) bound_keys[T4]();
+    if (buffer[6] & 0x02 && bound_keys[T1]) bound_keys[T1](true);
+    if (buffer[6] & 0x04 && bound_keys[T2]) bound_keys[T2](true);
+    if (buffer[6] & 0x08 && bound_keys[T3]) bound_keys[T3](true);
+    if (buffer[6] & 0x10 && bound_keys[T4]) bound_keys[T4](true);
 
     /* Brightness */
     if (buffer[7] & (0x20 | 0x40) && bound_keys[BRIGHT])
-        bound_keys[BRIGHT]();
+        bound_keys[BRIGHT](true);
 
     /* Mouse buttons */
     if (buffer[7] & 0x02 && bound_keys[CLICK1])
-        bound_keys[CLICK1]();
+        bound_keys[CLICK1](true);
     if (buffer[7] & 0x04 && bound_keys[CLICK2])
-        bound_keys[CLICK2]();
+        bound_keys[CLICK2](true);
 
     /* Bytes 1 and 2 are X and Y resp */
-    if ((buffer[1] || buffer[2]) && *_stick)
+    if ((buffer[1] || buffer[2]) && *_stick && (buffer[1] != stick_x || buffer[2] != stick_y)) {
+        stick_x = buffer[1];
+        stick_y = buffer[2];
         (*_stick)(buffer[1], buffer[2]);
+    }
 
     return 0;
 }
