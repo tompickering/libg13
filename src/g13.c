@@ -307,7 +307,7 @@ int g13_init(void) {
     bound_keys = calloc(N_KEYS, sizeof(g13_func_ptr_btn_t));
     _stick = calloc(1, sizeof(g13_func_ptr_stk_t));
 
-    create_uinput();
+    /*create_uinput();*/
 
     ndev = libusb_get_device_list(NULL, &devs);
     for (i = 0; i < ndev; i++) {
