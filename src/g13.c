@@ -233,7 +233,6 @@ int read_keys(libusb_device_handle *handle) {
             }
             is_pressed = buffer[j + 3] & (1 << i);
             if (is_pressed != (key_state[j] & (1 << i))) {
-                printf("%d %d\n", is_pressed, key_state[j]);
                 key_state[j] ^= (1 << i);
                 if (bound_keys[G1 + j*8 + i]) {
                     bound_keys[G1 + j*8 + i](is_pressed);
