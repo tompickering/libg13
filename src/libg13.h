@@ -23,7 +23,7 @@ enum G13Keys {
 // Input callback function types
 typedef void(*g13_func_ptr_btn_t)(bool);
 typedef void(*g13_func_ptr_stk_t)(unsigned char, unsigned char);
-
+typedef void(*g13_func_ptr_btn_all_t)(int, bool);
 
 /*** g13.c ***/
 
@@ -34,8 +34,10 @@ void g13_set_color(int, int, int);
 void g13_render(void);
 void g13_bind_key(int, g13_func_ptr_btn_t);
 void g13_bind_stick(g13_func_ptr_stk_t);
+void g13_bind_all_keys(g13_func_ptr_btn_all_t);
 void g13_unbind_key(int);
 void g13_unbind_stick();
+void g13_unbind_all_keys();
 
 
 /*** draw.c ***/

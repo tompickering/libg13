@@ -24,8 +24,9 @@ G13LCD* lcd;
 
 libusb_device_handle *handle;
 
-g13_func_ptr_btn_t *bound_keys;
-g13_func_ptr_stk_t *_stick;
+g13_func_ptr_btn_t     *bound_keys;
+g13_func_ptr_stk_t     *_stick;
+g13_func_ptr_btn_all_t *_all_keys;
 
 static char stick_x;
 static char stick_y;
@@ -163,6 +164,10 @@ void g13_bind_stick(g13_func_ptr_stk_t f) {
     *_stick = f;
 }
 
+void g13_bind_all_keys(g13_func_ptr_btn_all_t f) {
+    *_all_keys = f;
+}
+
 void g13_unbind_key(int k) {
     bound_keys[k] = NULL;
 }
@@ -171,11 +176,18 @@ void g13_unbind_stick() {
     *_stick = NULL;
 }
 
+void g13_unbind_all_keys() {
+    *_all_keys = NULL;
+}
+
 #define UPDATE_KEY(key, bufidx, mask) \
     if ((buffer[(bufidx)] & (mask)) != (key_state[((bufidx) - 3)] & (mask))) { \
         key_state[((bufidx) - 3)] ^= (mask); \
         if (bound_keys[(key)]) { \
             bound_keys[(key)]((buffer[(bufidx)] & (mask))); \
+        } \
+        if (*_all_keys) { \
+            (*_all_keys)((key), (buffer[(bufidx)] & (mask))); \
         } \
     }
 
@@ -236,6 +248,9 @@ int read_keys(libusb_device_handle *handle) {
                 key_state[j] ^= (1 << i);
                 if (bound_keys[G1 + j*8 + i]) {
                     bound_keys[G1 + j*8 + i](is_pressed);
+                }
+                if (*_all_keys) {
+                    (*_all_keys)(G1 + j*8 + i, is_pressed);
                 }
             }
         }
@@ -306,6 +321,7 @@ int g13_init(void) {
 
     bound_keys = calloc(N_KEYS, sizeof(g13_func_ptr_btn_t));
     _stick = calloc(1, sizeof(g13_func_ptr_stk_t));
+    _all_keys = calloc(1, sizeof(g13_func_ptr_btn_all_t));
 
     /*create_uinput();*/
 
