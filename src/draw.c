@@ -116,8 +116,11 @@ void render(G13LCD* lcd) {
 }
 
 void clear_elems() {
-    for (Elem *e = elems; e != NULL; e = e->next)
+    Elem *next;
+    for (Elem *e = elems; e != NULL; e = next) {
+        next = e->next;
         free(e);
+    }
     elems = NULL;
 }
 
