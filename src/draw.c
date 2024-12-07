@@ -49,7 +49,7 @@ void g13_draw_char(unsigned int x, unsigned int y, char c) {
     e->y_off = y;
 }
 
-void g13_draw_sentence(unsigned int x, unsigned int y, char* c) {
+void g13_draw_sentence(unsigned int x, unsigned int y, const char* c) {
     int charx = x;
     int i;
     for (i = 0; i < strlen(c); ++i) {
