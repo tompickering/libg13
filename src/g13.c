@@ -99,7 +99,7 @@ int create_uinput() {
     }
 
     memset(&uinp, 0, sizeof(uinp));
-    strncpy(uinp.name, name, sizeof(name));
+    strncpy(uinp.name, name, UINPUT_MAX_NAME_SIZE);
     uinp.id.version = 1;
     uinp.id.bustype = BUS_USB;
     uinp.id.product = 0x1;
