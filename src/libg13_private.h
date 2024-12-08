@@ -35,6 +35,7 @@ extern Elem** ascii;
 
 Elem* get_ascii(char);
 void _add_point(Elem*, Point);
+void _scale_elem(Elem*, Elem*, unsigned int);
 void render(G13LCD*);
 void clear_elems();
 G13LCD *new_lcd(void);

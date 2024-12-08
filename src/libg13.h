@@ -43,7 +43,9 @@ void g13_unbind_all_keys();
 /*** draw.c ***/
 
 void g13_draw_char(unsigned int, unsigned int, char);
+void g13_draw_char_scaled(unsigned int, unsigned int, char, unsigned int);
 void g13_draw_sentence(unsigned int, unsigned int, const char*);
+void g13_draw_sentence_scaled(unsigned int, unsigned int, const char*, unsigned int);
 void g13_draw_circle(unsigned int, unsigned int, float);
 void g13_draw_line(int, int, int, int);
 void g13_draw_triangle(int, int, int, int, int, int);

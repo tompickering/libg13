@@ -37,25 +37,53 @@ void _add_point(Elem* e, Point p) {
     (e->p[e->count-1]).y = p.y;
 }
 
+void _scale_elem(Elem* dst, Elem* src, unsigned int scale) {
+    dst->count = 0;
+    dst->is_grapheme = src->is_grapheme;
+    dst->x_off = src->x_off;
+    dst->y_off = src->y_off;
+
+    for (unsigned int i_src = 0; i_src < src->count; ++i_src) {
+        const Point *p = &(src->p[i_src]);
+        for (unsigned int j = 0; j < scale; ++j) {
+            for (unsigned int i = 0; i < scale; ++i) {
+                _add_point(dst, (Point){p->x*scale+i, p->y*scale+j});
+            }
+        }
+    }
+}
+
 void g13_draw_char(unsigned int x, unsigned int y, char c) {
+    g13_draw_char_scaled(x, y, c, 1);
+}
+
+void g13_draw_char_scaled(unsigned int x, unsigned int y, char c, unsigned int scale) {
     Elem* e = _new_elem();
     Elem* grapheme;
     grapheme = get_ascii(toupper(c));
-    // The only thing that doesn't carry straight
-    // across is 'next', but this should be NULL
-    // in src and dst anyway since e is new.
-    memcpy(e, grapheme, sizeof(Elem));
+    if (scale == 1) {
+        // The only thing that doesn't carry straight
+        // across is 'next', but this should be NULL
+        // in src and dst anyway since e is new.
+        memcpy(e, grapheme, sizeof(Elem));
+    } else {
+        _scale_elem(e, grapheme, scale);
+    }
     e->x_off = x;
     e->y_off = y;
 }
 
 void g13_draw_sentence(unsigned int x, unsigned int y, const char* c) {
+    g13_draw_sentence_scaled(x, y, c, 1);
+}
+
+void g13_draw_sentence_scaled(unsigned int x, unsigned int y, const char* c, unsigned int scale) {
     int charx = x;
     int i;
     for (i = 0; i < strlen(c); ++i) {
         if (c[i] == ' ') { charx += 3; continue; } // Smaller spaces
-        g13_draw_char(charx, y, c[i]);
-        charx += 6;
+        g13_draw_char_scaled(charx, y, c[i], scale);
+        charx += 6*scale;
     }
 }
 
