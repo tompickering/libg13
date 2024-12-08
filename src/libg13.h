@@ -45,8 +45,8 @@ void g13_unbind_all_keys();
 
 void g13_draw_char(uint32_t, uint32_t, char);
 void g13_draw_char_scaled(uint32_t, uint32_t, char, uint32_t);
-void g13_draw_sentence(uint32_t, uint32_t, const char*);
-void g13_draw_sentence_scaled(uint32_t, uint32_t, const char*, uint32_t);
+void g13_draw_string(uint32_t, uint32_t, const char*);
+void g13_draw_string_scaled(uint32_t, uint32_t, const char*, uint32_t);
 void g13_draw_circle(uint32_t, uint32_t, float);
 void g13_draw_line(int32_t, int32_t, int32_t, int32_t);
 void g13_draw_triangle(int32_t, int32_t, int32_t, int32_t, int32_t, int32_t);

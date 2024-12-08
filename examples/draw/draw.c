@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     g13_draw_circle(100, 20, 10);
     g13_draw_triangle(10, 5, 40, 10, 15, 20);
     g13_draw_line(60, 10, 80, 20);
-    g13_draw_sentence(5, 30, word);
+    g13_draw_string(5, 30, word);
     g13_render();
     return 0;
 }

@@ -73,11 +73,11 @@ void g13_draw_char_scaled(uint32_t x, uint32_t y, char c, uint32_t scale) {
     e->y_off = y;
 }
 
-void g13_draw_sentence(uint32_t x, uint32_t y, const char* c) {
-    g13_draw_sentence_scaled(x, y, c, 1);
+void g13_draw_string(uint32_t x, uint32_t y, const char* c) {
+    g13_draw_string_scaled(x, y, c, 1);
 }
 
-void g13_draw_sentence_scaled(uint32_t x, uint32_t y, const char* c, uint32_t scale) {
+void g13_draw_string_scaled(uint32_t x, uint32_t y, const char* c, uint32_t scale) {
     uint32_t charx = x;
     size_t i;
     for (i = 0; i < strlen(c); ++i) {
