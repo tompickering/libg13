@@ -43,6 +43,9 @@ void _init_lcd() {
 }
 
 void set_lcd_img(libusb_device_handle *handle, char mask, char *file) {
+    if (handle == NULL)
+        return;
+
     uint32_t i = 0;
     if (file) {
         FILE* f = fopen(file, "r");
@@ -65,6 +68,9 @@ void g13_clear_lcd() {
 }
 
 void g13_render() {
+    if (handle == NULL)
+        return;
+
     unsigned char img2[960+32];
     int32_t written;
     size_t i;
@@ -141,6 +147,9 @@ void send_event(int32_t infile, int32_t type, int32_t code, int32_t val) {
 }
 
 void g13_set_color(int32_t red, int32_t green, int32_t blue) {
+    if (handle == NULL)
+        return;
+
     int32_t error;
     unsigned char usb_data[] = { 5, 0, 0, 0, 0 };
     usb_data[1] = red;
@@ -192,6 +201,9 @@ void g13_unbind_all_keys() {
     }
 
 int32_t read_keys(libusb_device_handle *handle) {
+    if (handle == NULL)
+        return 0;
+
     unsigned char buffer[8];
     int32_t size;
     uint32_t i, j;
@@ -301,6 +313,9 @@ int32_t read_keys(libusb_device_handle *handle) {
 }
 
 void _read_keys(void) {
+    if (handle == NULL)
+        return;
+
     while (1) {
         read_keys(handle);
         /* Sleep for 1/1000 seconds */
