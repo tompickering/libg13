@@ -43,9 +43,11 @@ void stick(unsigned char new_x, unsigned char new_y) {
     }
 }
 
-void clear() {
-    g13_clear_lcd();
-    g13_render();
+void clear(bool pressed) {
+    if (pressed) {
+        g13_clear_lcd();
+        g13_render();
+    }
 }
 
 int main(int argc, char** argv) {
