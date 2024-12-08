@@ -314,9 +314,11 @@ int32_t g13_init(void) {
     struct libusb_device_descriptor desc;
     pthread_t keys_thread;
 
+    handle = NULL;
+
     if (libusb_init(NULL)) {
         fprintf(stderr, "Failed to initialise libusb\n");
-        exit(1);
+        return 1;
     }
 
     bound_keys = calloc(N_KEYS, sizeof(g13_func_ptr_btn_t));
@@ -333,7 +335,7 @@ int32_t g13_init(void) {
 
             if (rx != 0) {
                 fprintf(stderr, "Could not create USB handle (requires root)\n");
-                exit(1);
+                return 2;
             }
 
             if (libusb_kernel_driver_active(handle, 0) == 1)
@@ -346,12 +348,16 @@ int32_t g13_init(void) {
 
     libusb_free_device_list(devs, 1);
 
+    if (handle == NULL) {
+        return 3;
+    }
+
     _init_ascii();
     _init_lcd();
 
     if (pthread_create(&keys_thread, NULL, (void *(*)(void*))&_read_keys, NULL)) {
         fprintf(stderr, "Could not create input thread\n");
-        exit(1);
+        return 4;
     }
 
     return 0;
