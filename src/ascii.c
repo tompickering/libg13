@@ -4,24 +4,24 @@
 #include <stdlib.h>
 
 void ASCII(char c, char r[5]) {
-    int i;
-    int x = 0;
-    int y = 0;
+    size_t i;
+    char x = 0;
+    char y = 0;
     for (i = 0; i < 5; ++i) {
-        do { if (r[i]&1) _add_point(ascii[(int)c], (Point){x, y}); ++x;
+        do { if (r[i]&1) _add_point(ascii[(size_t)c], (Point){x, y}); ++x;
         } while (r[i]>>=1);
         ++y; x = 0;
     }
 }
 
 Elem* get_ascii(char c) {
-    if (!ascii[(int)c]->p && c != ' ')
+    if (!ascii[(size_t)c]->p && c != ' ')
         return ascii[0]; // Default
-    return ascii[(int)c];
+    return ascii[(size_t)c];
 }
 
 void _init_ascii() {
-    int i;
+    size_t i;
     ascii = malloc(256 * sizeof(Elem*));
     for (i = 0; i < 256; ++i) {
         ascii[i] = (Elem*) malloc(sizeof(Elem));

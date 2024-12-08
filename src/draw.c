@@ -37,27 +37,27 @@ void _add_point(Elem* e, Point p) {
     (e->p[e->count-1]).y = p.y;
 }
 
-void _scale_elem(Elem* dst, Elem* src, unsigned int scale) {
+void _scale_elem(Elem* dst, Elem* src, uint32_t scale) {
     dst->count = 0;
     dst->is_grapheme = src->is_grapheme;
     dst->x_off = src->x_off;
     dst->y_off = src->y_off;
 
-    for (unsigned int i_src = 0; i_src < src->count; ++i_src) {
+    for (uint32_t i_src = 0; i_src < src->count; ++i_src) {
         const Point *p = &(src->p[i_src]);
-        for (unsigned int j = 0; j < scale; ++j) {
-            for (unsigned int i = 0; i < scale; ++i) {
+        for (uint32_t j = 0; j < scale; ++j) {
+            for (uint32_t i = 0; i < scale; ++i) {
                 _add_point(dst, (Point){p->x*scale+i, p->y*scale+j});
             }
         }
     }
 }
 
-void g13_draw_char(unsigned int x, unsigned int y, char c) {
+void g13_draw_char(uint32_t x, uint32_t y, char c) {
     g13_draw_char_scaled(x, y, c, 1);
 }
 
-void g13_draw_char_scaled(unsigned int x, unsigned int y, char c, unsigned int scale) {
+void g13_draw_char_scaled(uint32_t x, uint32_t y, char c, uint32_t scale) {
     Elem* e = _new_elem();
     Elem* grapheme;
     grapheme = get_ascii(toupper(c));
@@ -73,13 +73,13 @@ void g13_draw_char_scaled(unsigned int x, unsigned int y, char c, unsigned int s
     e->y_off = y;
 }
 
-void g13_draw_sentence(unsigned int x, unsigned int y, const char* c) {
+void g13_draw_sentence(uint32_t x, uint32_t y, const char* c) {
     g13_draw_sentence_scaled(x, y, c, 1);
 }
 
-void g13_draw_sentence_scaled(unsigned int x, unsigned int y, const char* c, unsigned int scale) {
-    int charx = x;
-    int i;
+void g13_draw_sentence_scaled(uint32_t x, uint32_t y, const char* c, uint32_t scale) {
+    uint32_t charx = x;
+    size_t i;
     for (i = 0; i < strlen(c); ++i) {
         if (c[i] == ' ') { charx += 3; continue; } // Smaller spaces
         g13_draw_char_scaled(charx, y, c[i], scale);
@@ -87,42 +87,42 @@ void g13_draw_sentence_scaled(unsigned int x, unsigned int y, const char* c, uns
     }
 }
 
-void g13_draw_circle(unsigned int x, unsigned int y, float r) {
+void g13_draw_circle(uint32_t x, uint32_t y, float r) {
     Elem* e = _new_elem();
     float cx = 0., cy = 0.;
     for (cx = -r; cx < r; cx+=0.001f) {
         cy = sqrtf((powf(r, 2.f) - powf(cx, 2.f)));
-        _add_point(e, (Point){(int)(cx+0.5f) + (float)x, (int)(cy+(float)y+0.5f)});
-        _add_point(e, (Point){(int)(cx+0.5f) + (float)x, (int)(-cy-0.5f+(float)y)});
+        _add_point(e, (Point){(char)(cx+0.5f) + (float)x, (char)(cy+(float)y+0.5f)});
+        _add_point(e, (Point){(char)(cx+0.5f) + (float)x, (char)(-cy-0.5f+(float)y)});
     }
 }
 
-void g13_draw_line(int x0, int y0, int x1, int y1) {
+void g13_draw_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1) {
     Point p;
     Elem* e = _new_elem();
-    unsigned int xt, yt;
+    int32_t xt, yt;
     if (x0 > x1) {xt = x0; yt = y0; x0 = x1; y0 = y1; x1 = xt; y1 = yt;}
     float dydx = (float)(y1 - y0)/(float)(x1 - x0);
-    int x = x0;
+    int32_t x = x0;
     float yf  = (float) y0;
-    int yint = (int) yf;
+    int32_t yint = (int32_t) yf;
     while (x <= x1) {
-        p.x = x; p.y = (dydx > 0) ? (int) (yf + 0.5f) : (int) (yf - 0.5);
+        p.x = x; p.y = (dydx > 0) ? (int32_t) (yf + 0.5f) : (int32_t) (yf - 0.5);
         _add_point(e, p);
         yf += dydx;
         if (dydx > 0 && yf > y1) break;
         if (dydx < 0 && yf < y1) break;
-        while (yint + 1 < (int) (yf + 0.5f) - 1) {
+        while (yint + 1 < (int32_t) (yf + 0.5f) - 1) {
             yint = (dydx > 0) ? p.y++ : p.y--;
             if (yint > y1) break;
             _add_point(e, p);
         }
-        yint = (int) yf;
+        yint = (int32_t) yf;
         ++x;
     }
 }
 
-void g13_draw_triangle(int x0, int y0, int x1, int y1, int x2, int y2) {
+void g13_draw_triangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2) {
     g13_draw_line(x0, y0, x1, y1);
     g13_draw_line(x1, y1, x2, y2);
     g13_draw_line(x2, y2, x0, y0);

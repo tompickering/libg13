@@ -43,7 +43,7 @@ void _init_lcd() {
 }
 
 void set_lcd_img(libusb_device_handle *handle, char mask, char *file) {
-    int i = 0;
+    uint32_t i = 0;
     if (file) {
         FILE* f = fopen(file, "r");
         while (i < 960)
@@ -66,9 +66,9 @@ void g13_clear_lcd() {
 
 void g13_render() {
     unsigned char img2[960+32];
-    int written;
-    int i;
-    int error;
+    int32_t written;
+    size_t i;
+    int32_t error;
     render(lcd);
     img2[0] = 0x03;
     i = 1; while (i < 32) img2[i++] = 0;  /* IMPORTANT! */
@@ -84,11 +84,11 @@ void g13_render() {
     }
 }
 
-int create_uinput() {
+int32_t create_uinput() {
     struct uinput_user_dev uinp;
-    int ufile;
-    int i;
-    int retcode;
+    int32_t ufile;
+    uint32_t i;
+    int32_t retcode;
     char name[] = "G13";
 
     ufile = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
@@ -131,7 +131,7 @@ int create_uinput() {
     return ufile;
 }
 
-void send_event(int infile, int type, int code, int val) {
+void send_event(int32_t infile, int32_t type, int32_t code, int32_t val) {
     memset(&_event, 0, sizeof(_event));
     gettimeofday(&_event.time, 0 );
     _event.type = type;
@@ -140,8 +140,8 @@ void send_event(int infile, int type, int code, int val) {
     write(infile, &_event, sizeof(_event));
 }
 
-void g13_set_color(int red, int green, int blue) {
-    int error;
+void g13_set_color(int32_t red, int32_t green, int32_t blue) {
+    int32_t error;
     unsigned char usb_data[] = { 5, 0, 0, 0, 0 };
     usb_data[1] = red;
     usb_data[2] = green;
@@ -156,7 +156,7 @@ void g13_set_color(int red, int green, int blue) {
     }
 }
 
-void g13_bind_key(int k, g13_func_ptr_btn_t f) {
+void g13_bind_key(int32_t k, g13_func_ptr_btn_t f) {
     bound_keys[k] = f;
 }
 
@@ -168,7 +168,7 @@ void g13_bind_all_keys(g13_func_ptr_btn_all_t f) {
     *_all_keys = f;
 }
 
-void g13_unbind_key(int k) {
+void g13_unbind_key(int32_t k) {
     bound_keys[k] = NULL;
 }
 
@@ -191,11 +191,11 @@ void g13_unbind_all_keys() {
         } \
     }
 
-int read_keys(libusb_device_handle *handle) {
+int32_t read_keys(libusb_device_handle *handle) {
     unsigned char buffer[8];
-    int size;
-    int i, j;
-    int error;
+    int32_t size;
+    uint32_t i, j;
+    int32_t error;
 
     memset(buffer, 0, sizeof(buffer));
 
@@ -216,7 +216,7 @@ int read_keys(libusb_device_handle *handle) {
 
     /*
     printf("\e[H\e[J");
-    for (int k = 0; k < 8; ++k) {
+    for (uint32_t k = 0; k < 8; ++k) {
         printf("%d: ", k);
         for (i = 0; i < 8; ++i) {
             if ((buffer[k] >> i) & 0x1) {
@@ -308,9 +308,9 @@ void _read_keys(void) {
     }
 }
 
-int g13_init(void) {
-    int ndev;
-    int i;
+int32_t g13_init(void) {
+    int32_t ndev;
+    uint32_t i;
     struct libusb_device_descriptor desc;
     pthread_t keys_thread;
 
@@ -327,7 +327,7 @@ int g13_init(void) {
 
     ndev = libusb_get_device_list(NULL, &devs);
     for (i = 0; i < ndev; i++) {
-        int rx = libusb_get_device_descriptor(devs[i], &desc);
+        int32_t rx = libusb_get_device_descriptor(devs[i], &desc);
         if (desc.idVendor == 0x046d && desc.idProduct == 0xc21c) {
             rx = libusb_open(devs[i], &handle);
 
