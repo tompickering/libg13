@@ -329,6 +329,8 @@ int32_t g13_init(void) {
     struct libusb_device_descriptor desc;
     pthread_t keys_thread;
 
+    _init_ascii();
+
     handle = NULL;
 
     if (libusb_init(NULL)) {
@@ -367,7 +369,6 @@ int32_t g13_init(void) {
         return 3;
     }
 
-    _init_ascii();
     _init_lcd();
 
     if (pthread_create(&keys_thread, NULL, (void *(*)(void*))&_read_keys, NULL)) {
