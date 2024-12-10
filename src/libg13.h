@@ -51,6 +51,11 @@ void g13_draw_string_scaled(uint32_t, uint32_t, const char*, uint32_t);
 void g13_draw_circle(uint32_t, uint32_t, float);
 void g13_draw_line(int32_t, int32_t, int32_t, int32_t);
 void g13_draw_triangle(int32_t, int32_t, int32_t, int32_t, int32_t, int32_t);
+void g13_draw_icon(int32_t, uint32_t, uint32_t);
 
+
+/*** icon.c ***/
+
+int32_t g13_define_icon(uint32_t*, uint8_t);
 
 #endif

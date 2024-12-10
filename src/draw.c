@@ -128,6 +128,21 @@ void g13_draw_triangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x
     g13_draw_line(x2, y2, x0, y0);
 }
 
+void g13_draw_icon(int32_t id, uint32_t x, uint32_t y) {
+    Elem* icon = _get_icon(id);
+
+    if (icon == NULL) {
+        return;
+    }
+
+    Elem* e = _new_elem();
+
+    memcpy(e, icon, sizeof(Elem));
+
+    e->x_off = x;
+    e->y_off = y;
+}
+
 /* Render drawn shapes onto LCD */
 void render(G13LCD* lcd) {
     Elem* e = elems;

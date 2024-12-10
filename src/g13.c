@@ -36,8 +36,6 @@ g13_func_ptr_btn_all_t *_all_keys;
 static char stick_x;
 static char stick_y;
 
-Elem** ascii;
-
 /* key_state[0] - key_state[4] corresponds with buffer[3] - buffer[7] */
 static char key_state[5];
 
@@ -351,6 +349,7 @@ int32_t g13_init(void) {
     brightness_shift = 0;
 
     _init_ascii();
+    _init_icons();
 
     handle = NULL;
 

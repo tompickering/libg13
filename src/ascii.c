@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 
+Elem **ascii;
+
 void ASCII(char c, char r[5]) {
     size_t i;
     char x = 0;

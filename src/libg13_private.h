@@ -33,7 +33,8 @@ struct Point {
     char y;
 };
 
-extern Elem** ascii;
+extern Elem **ascii;
+extern Elem **icons;
 
 Elem* get_ascii(char);
 void _add_point(Elem*, Point);
@@ -46,5 +47,10 @@ G13LCD *new_lcd(void);
 /*** ascii.c ***/
 
 void _init_ascii(void);
+
+/*** icon.c ***/
+
+void _init_icons(void);
+Elem* _get_icon(int32_t);
 
 #endif
