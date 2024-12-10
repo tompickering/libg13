@@ -32,6 +32,7 @@ int32_t g13_init(void);
 void g13_set_img(char*);
 void g13_clear_lcd();
 void g13_set_color(int32_t, int32_t, int32_t);
+void g13_set_brightness(int32_t);
 void g13_render(void);
 void g13_bind_key(int32_t, g13_func_ptr_btn_t);
 void g13_bind_stick(g13_func_ptr_stk_t);

@@ -6,6 +6,7 @@
 unsigned char x, y;
 
 void red(bool pressed) {
+    g13_set_brightness(1);
     if (pressed) {
         g13_set_color(255, 0, 0);
     } else {
@@ -14,6 +15,7 @@ void red(bool pressed) {
 }
 
 void green(bool pressed) {
+    g13_set_brightness(2);
     if (pressed) {
         g13_set_color(0, 255, 0);
     } else {
@@ -22,6 +24,7 @@ void green(bool pressed) {
 }
 
 void blue(bool pressed) {
+    g13_set_brightness(3);
     if (pressed) {
         g13_set_color(0, 0, 255);
     } else {

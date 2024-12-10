@@ -13,6 +13,8 @@
 #include <string.h>
 #include "libusb-1.0/libusb.h"
 
+#define MAX_BRIGHTNESS 4
+
 
 const unsigned char G13_LCD_PX_X = 160;
 const unsigned char G13_LCD_PX_Y = 43;
@@ -23,6 +25,9 @@ struct input_event _event;
 G13LCD* lcd;
 
 libusb_device_handle *handle;
+
+static uint8_t brightness_shift;
+static int32_t col_r, col_g, col_b;
 
 g13_func_ptr_btn_t     *bound_keys;
 g13_func_ptr_stk_t     *_stick;
@@ -152,9 +157,14 @@ void g13_set_color(int32_t red, int32_t green, int32_t blue) {
 
     int32_t error;
     unsigned char usb_data[] = { 5, 0, 0, 0, 0 };
-    usb_data[1] = red;
-    usb_data[2] = green;
-    usb_data[3] = blue;
+
+    col_r = red;
+    col_g = green;
+    col_b = blue;
+
+    usb_data[1] = col_r >> brightness_shift;
+    usb_data[2] = green >> brightness_shift;
+    usb_data[3] = blue >> brightness_shift;
 
     error = libusb_control_transfer(handle,
             LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE, 9, 0x307, 0,
@@ -163,6 +173,15 @@ void g13_set_color(int32_t red, int32_t green, int32_t blue) {
         exit(1);
         return;
     }
+}
+
+void g13_set_brightness(int32_t brightness) {
+    if (brightness < 0 || brightness > MAX_BRIGHTNESS) {
+        return;
+    }
+
+    brightness_shift = (MAX_BRIGHTNESS - (uint8_t)brightness);
+    g13_set_color(col_r, col_g, col_b);
 }
 
 void g13_bind_key(int32_t k, g13_func_ptr_btn_t f) {
@@ -328,6 +347,8 @@ int32_t g13_init(void) {
     uint32_t i;
     struct libusb_device_descriptor desc;
     pthread_t keys_thread;
+
+    brightness_shift = 0;
 
     _init_ascii();
 
