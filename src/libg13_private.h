@@ -23,7 +23,6 @@ struct Elem {
     Point* p;
     uint32_t count;
     Elem* next;
-    char is_grapheme;
     uint32_t x_off;
     uint32_t y_off;
 };

@@ -30,7 +30,6 @@ void _init_ascii() {
         ascii[i]->p = NULL;
         ascii[i]->next = NULL;
         ascii[i]->count = 0;
-        ascii[i]->is_grapheme = 1;
         ascii[i]->x_off = 0;
         ascii[i]->y_off = 0;
     }

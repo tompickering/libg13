@@ -27,7 +27,6 @@ int32_t g13_define_icon(uint32_t* descriptor, uint8_t n) {
     icons[id]->p = NULL;
     icons[id]->next = NULL;
     icons[id]->count = 0;
-    icons[id]->is_grapheme = 0;
     icons[id]->x_off = 0;
     icons[id]->y_off = 0;
 

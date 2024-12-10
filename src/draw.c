@@ -23,7 +23,6 @@ Elem* _new_elem() {
     e->p = NULL;
     e->next = NULL;
     e->count = 0;
-    e->is_grapheme = 0;
     e->x_off = 0;
     e->y_off = 0;
     return e;
@@ -39,7 +38,6 @@ void _add_point(Elem* e, Point p) {
 
 void _scale_elem(Elem* dst, Elem* src, uint32_t scale) {
     dst->count = 0;
-    dst->is_grapheme = src->is_grapheme;
     dst->x_off = src->x_off;
     dst->y_off = src->y_off;
 
